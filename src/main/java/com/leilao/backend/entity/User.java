@@ -37,15 +37,6 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "email_confirmed_at")
     private LocalDateTime emailConfirmedAt;
 
-    @Column(name = "external_customer_id")
-    private String externalCustomerId;
-
-    @Column(name = "forgot_password_token")
-    private String forgotPasswordToken;
-
-    @Column
-    private LocalDateTime validationCodeValidity;
-
     @Column
     private Boolean active;
 

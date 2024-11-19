@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin
 public class UserController {
 
     @Autowired
@@ -48,15 +49,6 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public User updateUser(@RequestBody User user) {
         return userService.update(user);
-    }
-
-    @PostMapping("/login")
-    @ResponseStatus(HttpStatus.OK)
-    public UserAuthResponseDto authenticateUser(@RequestBody UserAuthDto authRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authRequest.getEmail(), authRequest.getPassword()));
-        return new UserAuthResponseDto(jwtService.generateToken(authentication.getName()), authRequest.getEmail());
     }
 
 }
