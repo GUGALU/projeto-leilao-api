@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -53,6 +54,7 @@ public class UserService {
 
         Context context = new Context();
         context.setVariable("name", user.getName());
+        context.setVariable(email, email);
         context.setVariable("code", code);
 
         try {
@@ -74,7 +76,7 @@ public class UserService {
         }
 
         user.setValidationCode(null);
-        user.setActive(true);
+        user.setEmailConfirmedAt(LocalDateTime.now());
         userRepository.save(user);
     }
 

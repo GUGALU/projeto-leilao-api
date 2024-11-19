@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 public class AuthController {
 
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -38,10 +39,10 @@ public class AuthController {
         return userService.sendEmailWithCode(email);
     }
 
-    @PostMapping("/activate")
+    @GetMapping("/validate")
     @ResponseStatus(HttpStatus.OK)
-    public String activateUser(@RequestBody RecoveryPasswordDto request) {
-        userService.validateCode(request.getEmail(), request.getToken());
+    public String activateUser(@RequestParam String email, @RequestParam String code ) {
+        userService.validateCode(email, code);
         return "Usuário ativado com sucesso.";
     }
 

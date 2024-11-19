@@ -37,9 +37,6 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "email_confirmed_at")
     private LocalDateTime emailConfirmedAt;
 
-    @Column
-    private Boolean active;
-
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     @Setter(AccessLevel.NONE)
     private List<UserProfile> userProfiles;
