@@ -2,19 +2,16 @@ package com.leilao.backend.controller;
 
 import com.leilao.backend.commom.security.JwtService;
 import com.leilao.backend.entity.User;
-import com.leilao.backend.response.UserAuthDto;
-import com.leilao.backend.response.UserAuthResponseDto;
 import com.leilao.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin
 public class UserController {
 
     @Autowired
@@ -48,15 +45,6 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public User updateUser(@RequestBody User user) {
         return userService.update(user);
-    }
-
-    @PostMapping("/login")
-    @ResponseStatus(HttpStatus.OK)
-    public UserAuthResponseDto authenticateUser(@RequestBody UserAuthDto authRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authRequest.getEmail(), authRequest.getPassword()));
-        return new UserAuthResponseDto(jwtService.generateToken(authentication.getName()), authRequest.getEmail());
     }
 
 }
