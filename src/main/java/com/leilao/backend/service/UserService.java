@@ -5,6 +5,7 @@ import com.leilao.backend.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -42,11 +43,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com email: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
-
 
     public String sendEmailWithCode(String email) {
         User user = userRepository.findByEmail(email)
@@ -121,7 +122,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User registerUser(String email, String password) {
+    public User registerUser(String name, String email, String password) {
         if (userRepository.findByEmail(email).isPresent()) {
             throw new IllegalArgumentException("E-mail já está em uso.");
         }
@@ -133,17 +134,17 @@ public class UserService {
         User user = new User();
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
+        user.setName(name);
 
-        Context context = new Context();
-        context.setVariable("name", user.getName());
-        try {
-            emailService.sendTemplateEmail(
-                    user.getEmail(),
-                    "Cadastro Efetuado com Sucesso", context,
-                    "welcome");
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+//        Context context = new Context();
+//        try {
+//            emailService.sendTemplateEmail(
+//                    user.getEmail(),
+//                    "Cadastro Efetuado com Sucesso", context,
+//                    "welcome");
+//        } catch (MessagingException e) {
+//            e.printStackTrace();
+//        }
 
         return userRepository.save(user);
     }

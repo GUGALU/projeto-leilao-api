@@ -53,13 +53,12 @@ public class User extends BaseEntity implements UserDetails {
     @Setter(AccessLevel.NONE)
     private List<UserProfile> userProfiles;
 
-    @NotBlank(message = "{name.required}")
+    @Column
     private String name;
 
     @Email(message = "{name.invalid}")
     private String email;
 
-    // @CPF
     private String cpf;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -84,5 +83,10 @@ public class User extends BaseEntity implements UserDetails {
     @Override
     public String getUsername() {
         return email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 }
